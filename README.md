@@ -11,19 +11,17 @@ workloads.
 - Use reusable modules
 - Follow infrastructure-as-code best practices
 
-## Scope (Initial Phase)
+## Scope
 
-- No application code
-- No CI/CD automation
-- No cloud resources created yet
-
-This phase focuses only on structure and design.
+- Infrastructure only (no application code)
+- Incremental implementation by phase
+- Focus on clarity, maintainability, and safety
 
 ## Planned Components
 
 - Networking (VPC, subnets, routing)
-- Compute (EC2 / container-ready baseline)
 - Security (IAM, security groups)
+- Compute (EC2 / container-ready baseline)
 
 ## Environments
 
@@ -32,6 +30,6 @@ This phase focuses only on structure and design.
 
 ## Status
 
-🧭 Architecture and repository structure defined.
-Implementation will proceed incrementally.
+🧭 Architecture and repository structure defined.  
+🚧 Networking baseline implementation in progress.
 
