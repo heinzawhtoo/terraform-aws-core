@@ -1,14 +1,13 @@
 module "network" {
   source = "../../modules/network"
 
-  vpc_cidr       = "10.0.0.0/16"
-  public_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
-  private_subnets = ["10.0.101.0/24", "10.0.102.0/24"]
-  azs             = ["ap-southeast-1a", "ap-southeast-1b"]
+  vpc_cidr        = var.vpc_cidr
+  public_subnets  = var.public_subnets
+  private_subnets = var.private_subnets
+  azs             = var.azs
 
   tags = {
     Environment = "dev"
     Project     = "terraform-aws-core"
   }
 }
-
