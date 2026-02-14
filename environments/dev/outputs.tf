@@ -3,9 +3,19 @@ output "vpc_id" {
   value       = module.network.vpc_id
 }
 
-output "public_subnet_id" {
-  description = "Public subnet ID for dev environment."
-  value       = module.network.public_subnet_id
+output "public_subnet_1_id" {
+  description = "Public subnet 1 ID for dev environment."
+  value       = module.network.public_subnet_1_id
+}
+
+output "public_subnet_2_id" {
+  description = "Public subnet 2 ID for dev environment."
+  value       = module.network.public_subnet_2_id
+}
+
+output "private_subnet_id" {
+  description = "Private subnet ID for dev environment."
+  value       = module.network.private_subnet_id
 }
 
 output "web_instance_id" {
@@ -13,9 +23,14 @@ output "web_instance_id" {
   value       = module.compute.instance_id
 }
 
-output "web_public_ip" {
-  description = "Web EC2 public IP for dev environment."
-  value       = module.compute.public_ip
+output "alb_dns_name" {
+  description = "Public DNS name of the ALB for dev environment."
+  value       = module.compute.alb_dns_name
+}
+
+output "instance_role_arn" {
+  description = "IAM role ARN for dev EC2 instance."
+  value       = module.compute.instance_role_arn
 }
 
 output "s3_bucket_id" {

@@ -26,11 +26,14 @@ locals {
 module "network" {
   source = "../../modules/network"
 
-  name_prefix        = local.name_prefix
-  vpc_cidr           = var.vpc_cidr
-  public_subnet_cidr = var.public_subnet_cidr
-  availability_zone  = var.availability_zone
-  tags               = local.common_tags
+  name_prefix          = local.name_prefix
+  vpc_cidr             = var.vpc_cidr
+  public_subnet_1_cidr = var.public_subnet_1_cidr
+  public_subnet_2_cidr = var.public_subnet_2_cidr
+  private_subnet_cidr  = var.private_subnet_cidr
+  availability_zone_1  = var.availability_zone_1
+  availability_zone_2  = var.availability_zone_2
+  tags                 = local.common_tags
 }
 
 module "security" {
@@ -45,13 +48,16 @@ module "security" {
 module "compute" {
   source = "../../modules/compute"
 
-  name_prefix       = local.name_prefix
-  ami_id            = var.ami_id
-  instance_type     = var.instance_type
-  subnet_id         = module.network.public_subnet_id
-  security_group_id = module.security.security_group_id
-  key_name          = var.key_name
-  tags              = local.common_tags
+  name_prefix           = local.name_prefix
+  ami_id                = var.ami_id
+  instance_type         = var.instance_type
+  vpc_id                = module.network.vpc_id
+  private_subnet_id     = module.network.private_subnet_id
+  alb_subnet_ids        = [module.network.public_subnet_1_id, module.network.public_subnet_2_id]
+  alb_security_group_id = module.security.alb_security_group_id
+  web_security_group_id = module.security.web_security_group_id
+  key_name              = var.key_name
+  tags                  = local.common_tags
 }
 
 module "storage" {

@@ -13,12 +13,27 @@ variable "instance_type" {
   type        = string
 }
 
-variable "subnet_id" {
-  description = "Subnet ID where the EC2 instance is deployed."
+variable "vpc_id" {
+  description = "VPC ID for ALB target group."
   type        = string
 }
 
-variable "security_group_id" {
+variable "private_subnet_id" {
+  description = "Private subnet ID where the EC2 instance is deployed."
+  type        = string
+}
+
+variable "alb_subnet_ids" {
+  description = "Two public subnet IDs for internet-facing ALB."
+  type        = list(string)
+}
+
+variable "alb_security_group_id" {
+  description = "Security group ID attached to the ALB."
+  type        = string
+}
+
+variable "web_security_group_id" {
   description = "Security group ID attached to the EC2 instance."
   type        = string
 }

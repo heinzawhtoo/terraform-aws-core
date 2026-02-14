@@ -2,15 +2,22 @@
 
 Simple AWS Terraform project with two environments (`dev` and `prod`) using reusable modules.
 
-## What is included
+## Architecture
 
-- One VPC per environment
-- One public subnet per environment
-- One EC2 web server per environment
-- One security group per environment
-  - HTTP/HTTPS open to public
-  - SSH allowed only from configured CIDR in tfvars
-- One S3 bucket per environment
+Per environment, this stack now creates:
+
+- 1 VPC
+- 2 public subnets (for internet-facing ALB)
+- 1 private subnet (for EC2 web server)
+- 1 Internet Gateway
+- 1 NAT Gateway (private subnet egress)
+- 1 Application Load Balancer
+- 1 EC2 instance (web server) in private subnet, registered to ALB target group
+- IAM Role + Instance Profile for EC2 (with AmazonSSMManagedInstanceCore)
+- Security groups:
+  - ALB SG: HTTP/HTTPS from `0.0.0.0/0`
+  - Web SG: HTTP only from ALB SG, SSH from configured `ssh_allowed_cidr`
+- 1 S3 bucket
 
 ## Project layout
 
@@ -28,15 +35,15 @@ Simple AWS Terraform project with two environments (`dev` and `prod`) using reus
 │       ├── outputs.tf
 │       └── prod.tfvars.example
 └── modules
-    ├── compute
-    ├── network
-    ├── security
-    └── storage
+    ├── compute   # EC2 + ALB + target group + IAM role/profile
+    ├── network   # VPC + public/private subnets + IGW + NAT + routing
+    ├── security  # ALB SG + web SG
+    └── storage   # S3 bucket
 ```
 
 ## Usage
 
-1. Copy and edit tfvars example:
+1. Copy and edit tfvars example files:
 
 ```bash
 cp environments/dev/dev.tfvars.example environments/dev/dev.tfvars
@@ -59,4 +66,8 @@ terraform init
 terraform plan -var-file=prod.tfvars
 ```
 
-> `.tfvars` files are gitignored. Use your own values and do not hardcode sensitive data in code.
+## Notes
+
+- `.tfvars` files are gitignored. Keep real values out of version control.
+- For ALB, two public subnets in different AZs are used (`availability_zone_1`, `availability_zone_2`).
+- EC2 is intentionally private; access the app via `alb_dns_name` output.
