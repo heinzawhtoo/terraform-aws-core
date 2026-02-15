@@ -44,6 +44,8 @@ Per environment, this stack now creates:
     └── storage   # S3 bucket
 ```
 
+![Network Architecture Diagram](images/network-architecture.jpg)
+
 ## Usage (terraform.tfvars auto-load)
 
 Use `terraform.tfvars` so Terraform loads variables automatically for `plan/apply/destroy`.
