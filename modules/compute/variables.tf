@@ -38,10 +38,32 @@ variable "web_security_group_id" {
   type        = string
 }
 
-variable "key_name" {
-  description = "Optional EC2 key pair name for SSH access."
+variable "create_key_pair" {
+  description = "Create a new EC2 key pair from provided public key."
+  type        = bool
+  default     = false
+}
+
+variable "key_pair_name" {
+  description = "Name to use for a new key pair (when create_key_pair=true) or existing key pair name (when create_key_pair=false)."
   type        = string
   default     = null
+
+  validation {
+    condition     = var.create_key_pair || var.key_pair_name != null
+    error_message = "When create_key_pair is false, key_pair_name must be set to an existing EC2 key pair name (or set create_key_pair=true)."
+  }
+}
+
+variable "public_key" {
+  description = "Public key material for aws_key_pair when create_key_pair=true."
+  type        = string
+  default     = null
+
+  validation {
+    condition     = !var.create_key_pair || var.public_key != null
+    error_message = "When create_key_pair is true, public_key must be provided."
+  }
 }
 
 variable "tags" {

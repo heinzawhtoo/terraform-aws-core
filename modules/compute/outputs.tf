@@ -17,3 +17,8 @@ output "instance_role_arn" {
   description = "ARN of the EC2 IAM role."
   value       = aws_iam_role.ec2.arn
 }
+
+output "effective_key_pair_name" {
+  description = "Key pair name attached to the EC2 instance."
+  value       = local.effective_key_name
+}

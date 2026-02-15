@@ -14,6 +14,9 @@ Per environment, this stack now creates:
 - 1 Application Load Balancer
 - 1 EC2 instance (web server) in private subnet, registered to ALB target group
 - IAM Role + Instance Profile for EC2 (with AmazonSSMManagedInstanceCore)
+- EC2 key pair support
+  - create and manage a key pair from `public_key`
+  - or use an existing key pair by name
 - Security groups:
   - ALB SG: HTTP/HTTPS from `0.0.0.0/0`
   - Web SG: HTTP only from ALB SG, SSH from configured `ssh_allowed_cidr`
@@ -35,19 +38,21 @@ Per environment, this stack now creates:
 │       ├── outputs.tf
 │       └── prod.tfvars.example
 └── modules
-    ├── compute   # EC2 + ALB + target group + IAM role/profile
+    ├── compute   # EC2 + ALB + target group + IAM role/profile + key pair
     ├── network   # VPC + public/private subnets + IGW + NAT + routing
     ├── security  # ALB SG + web SG
     └── storage   # S3 bucket
 ```
 
-## Usage
+## Usage (terraform.tfvars auto-load)
 
-1. Copy and edit tfvars example files:
+Use `terraform.tfvars` so Terraform loads variables automatically for `plan/apply/destroy`.
+
+1. Copy and edit environment tfvars:
 
 ```bash
-cp environments/dev/dev.tfvars.example environments/dev/dev.tfvars
-cp environments/prod/prod.tfvars.example environments/prod/prod.tfvars
+cp environments/dev/dev.tfvars.example environments/dev/terraform.tfvars
+cp environments/prod/prod.tfvars.example environments/prod/terraform.tfvars
 ```
 
 2. Run Terraform for dev:
@@ -55,7 +60,7 @@ cp environments/prod/prod.tfvars.example environments/prod/prod.tfvars
 ```bash
 cd environments/dev
 terraform init
-terraform plan -var-file=dev.tfvars
+terraform plan
 ```
 
 3. Run Terraform for prod:
@@ -63,8 +68,22 @@ terraform plan -var-file=dev.tfvars
 ```bash
 cd environments/prod
 terraform init
-terraform plan -var-file=prod.tfvars
+terraform plan
 ```
+
+## SSH key notes
+
+In each environment tfvars example, these variables control key behavior:
+
+- `create_key_pair = true` + `public_key` + `key_pair_name`:
+  Terraform creates the key pair and uses it for EC2.
+- `create_key_pair = false` + `key_pair_name`:
+  Terraform uses an already existing key pair.
+
+If your run fails with `InvalidKeyPair.NotFound`, either:
+
+- switch to `create_key_pair = true` and set a valid `public_key`, or
+- set `key_pair_name` to a key pair that already exists in that AWS region.
 
 ## Notes
 

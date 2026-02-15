@@ -58,8 +58,20 @@ variable "instance_type" {
   type        = string
 }
 
-variable "key_name" {
-  description = "Optional key pair name for EC2 SSH access."
+variable "create_key_pair" {
+  description = "Create an EC2 key pair from provided public key."
+  type        = bool
+  default     = false
+}
+
+variable "key_pair_name" {
+  description = "Name of key pair to use (existing or newly created)."
+  type        = string
+  default     = null
+}
+
+variable "public_key" {
+  description = "Public key material when create_key_pair is true."
   type        = string
   default     = null
 }

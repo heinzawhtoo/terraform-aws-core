@@ -37,3 +37,8 @@ output "s3_bucket_id" {
   description = "S3 bucket ID for prod environment."
   value       = module.storage.bucket_id
 }
+
+output "key_pair_name" {
+  description = "Key pair name attached to EC2 instance."
+  value       = module.compute.effective_key_pair_name
+}

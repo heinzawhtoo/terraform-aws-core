@@ -1,3 +1,18 @@
+locals {
+  effective_key_name = var.create_key_pair ? aws_key_pair.this[0].key_name : var.key_pair_name
+}
+
+resource "aws_key_pair" "this" {
+  count = var.create_key_pair ? 1 : 0
+
+  key_name   = coalesce(var.key_pair_name, "${var.name_prefix}-key")
+  public_key = var.public_key
+
+  tags = merge(var.tags, {
+    Name = "${var.name_prefix}-key"
+  })
+}
+
 resource "aws_iam_role" "ec2" {
   name = "${var.name_prefix}-ec2-role"
 
@@ -79,7 +94,7 @@ resource "aws_instance" "web" {
   instance_type          = var.instance_type
   subnet_id              = var.private_subnet_id
   vpc_security_group_ids = [var.web_security_group_id]
-  key_name               = var.key_name
+  key_name               = local.effective_key_name
   iam_instance_profile   = aws_iam_instance_profile.ec2.name
 
   user_data = <<-EOT

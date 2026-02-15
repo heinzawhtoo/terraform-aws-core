@@ -56,7 +56,9 @@ module "compute" {
   alb_subnet_ids        = [module.network.public_subnet_1_id, module.network.public_subnet_2_id]
   alb_security_group_id = module.security.alb_security_group_id
   web_security_group_id = module.security.web_security_group_id
-  key_name              = var.key_name
+  create_key_pair       = var.create_key_pair
+  key_pair_name         = var.key_pair_name
+  public_key            = var.public_key
   tags                  = local.common_tags
 }
 
