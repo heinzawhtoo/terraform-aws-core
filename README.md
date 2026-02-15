@@ -71,7 +71,9 @@ terraform init
 terraform plan
 ```
 
-## SSH key notes
+## SSH key notes 
+
+[Read the SSH Detail Guide](doc/SSH-Detail-Guide.md)
 
 In each environment tfvars example, these variables control key behavior:
 
