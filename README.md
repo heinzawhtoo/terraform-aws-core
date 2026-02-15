@@ -22,6 +22,9 @@ Per environment, this stack now creates:
   - Web SG: HTTP only from ALB SG, SSH from configured `ssh_allowed_cidr`
 - 1 S3 bucket
 
+![Network Architecture Diagram](images/network-architecture.jpg)
+
+
 ## Project layout
 
 ```text
@@ -44,7 +47,6 @@ Per environment, this stack now creates:
     └── storage   # S3 bucket
 ```
 
-![Network Architecture Diagram](images/network-architecture.jpg)
 
 ## Usage (terraform.tfvars auto-load)
 
